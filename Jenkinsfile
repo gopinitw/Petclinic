@@ -4,7 +4,9 @@ pipeline {
     tools{
         maven 'mvn'
     }
-    
+        environment {
+        SCANNER_HOME=tool 'sonar-scanner'
+    }
     stages{
         
         stage("Compile"){
@@ -18,18 +20,20 @@ pipeline {
                 sh "mvn test"
             }
         }
+                stage("Sonarqube Analysis "){
+            steps{
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Petclinic \
+                    -Dsonar.java.binaries=. \
+                    -Dsonar.projectKey=Petclinic '''
+    
+                }
+            }
+        }
          stage("Build"){
             steps{
                 sh " mvn clean install"
             }
         }
-        
-        stage("Docker Build"){
-            steps{
-                script{
-                        sh "docker build -t image1 ."
-                    }
-                }
-            }
     }
 }
