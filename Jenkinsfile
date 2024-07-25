@@ -31,11 +31,11 @@ pipeline {
         stage("Sonarqube Analysis") {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'sonarlatest', variable: 'SONAR_TOKEN')]) {
                         sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=Petclinic \
+                        -Dsonar.projectName=cart \
                         -Dsonar.java.binaries=target/classes \
-                        -Dsonar.projectKey=Petclinic \
+                        -Dsonar.projectKey=cart \
                         -Dsonar.sources=src/main/java \
                         -Dsonar.tests=src/test/java \
                         -Dsonar.test.inclusions=**/*Test.java \
