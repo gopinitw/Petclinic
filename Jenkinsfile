@@ -7,23 +7,11 @@ pipeline {
     
     stages{
         
-        stage("Compile"){
-            steps{
-                sh "mvn clean compile"
-            }
-        }
-        
-         stage("Test Cases"){
-            steps{
-                sh "mvn test"
-            }
-        }
-        
-        stage('SonarQube Analysis') {
+            stage('Build + Test + Sonar') {
             steps {
                 withSonarQubeEnv("${SONAR_ENV}") {
                     sh '''
-                      mvn sonar:sonar \
+                      mvn clean verify sonar:sonar \
                       -Dsonar.projectKey=java-demo \
                       -Dsonar.projectName="Java Demo App"
                     '''
